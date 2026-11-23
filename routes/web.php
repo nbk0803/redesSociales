@@ -37,6 +37,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/grupos/{group}/miembros/excel', [ReporteController::class, 'grupoMiembrosExcel'])->name('grupo.miembros.excel');
         Route::get('/usuarios/pdf', [ReporteController::class, 'usuariosPdf'])->name('usuarios.pdf');
         Route::get('/usuarios/excel', [ReporteController::class, 'usuariosExcel'])->name('usuarios.excel');
+        Route::get('/usuarios/{user}/pdf', [ReporteController::class, 'usuarioPdf'])->name('usuario.pdf');
+        Route::get('/usuarios/{user}/excel', [ReporteController::class, 'usuarioExcel'])->name('usuario.excel');
         Route::get('/membresias/pdf', [ReporteController::class, 'membresiasPdf'])->name('membresias.pdf');
         Route::get('/membresias/excel', [ReporteController::class, 'membresiasExcel'])->name('membresias.excel');
     });

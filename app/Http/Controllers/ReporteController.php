@@ -65,15 +65,15 @@ class ReporteController extends Controller
         $usuarios = User::with('memberGroups')->orderBy('id')->get();
 
         $data = [
-            'titulo' => 'Reporte General de Usuarios',
-            'fecha' => now()->format('d/m/Y H:i'),
+            'titulo' => 'General Users Report',
+            'fecha' => now()->format('m/d/Y H:i'),
             'usuarios' => $usuarios,
         ];
 
         $pdf = Pdf::loadView('reportes.usuarios', $data)
             ->setPaper('a4', 'landscape');
 
-        return $pdf->stream('reporte-usuarios.pdf');
+        return $pdf->stream('users-report.pdf');
     }
 
     public function membresiasPdf(Request $request)
@@ -112,7 +112,27 @@ class ReporteController extends Controller
 
     public function usuariosExcel()
     {
-        return Excel::download(new UsersExport, 'usuarios-general.xlsx');
+        return Excel::download(new UsersExport, 'users-general.xlsx');
+    }
+
+    public function usuarioPdf(User $user)
+    {
+        $user->load('memberGroups');
+
+        $data = [
+            'user' => $user,
+            'fecha' => now()->format('m/d/Y H:i'),
+        ];
+
+        $pdf = Pdf::loadView('reportes.usuario', $data)
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->stream('user-'.$user->id.'.pdf');
+    }
+
+    public function usuarioExcel(User $user)
+    {
+        return Excel::download(new \App\Exports\UsersExport($user), 'user-'.$user->id.'.xlsx');
     }
 
     public function membresiasExcel(Request $request)
